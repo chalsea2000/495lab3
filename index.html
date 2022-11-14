@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <title>UW To-go</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            display: flex;
+            height: 100vh;
+            flex-direction: row-reverse; 
+            position: relative;
+            align-items: stretch;
+        }
+
+        #map {
+            position:absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #side-panel {
+            z-index: 1;
+            margin-left: 100px;
+            overflow-y: scroll;
+            flex-basis: 350px;
+            opacity: 100%;
+            background-color: #663271;
+            color:white;
+        }
+
+        button {
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            background-color: #e8deff;
+            color:black;
+        }
+
+        h2, button {
+             margin-left: 10px;;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #c8a4d4;
+        }
+
+        @media screen and (max-width: 1024px) {
+            #side-panel {
+                opacity: 0%;
+            }
+        
+        }
+    
+    </style>
+</head>
+
+<body>
+    <main id="container">
+        <div id="side-panel">
+
+            <h2>Chalsea's UW To-go Places</h2>
+            <button>Sort by Rating</button>
+
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Rating</th>
+                </tr>
+            </table>
+
+        </div>
+        <div id="map"></div>
+
+    </main>
+    <script>
+        // define the mapbox access token
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+
+        // define the map object
+        let map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/dark-v9', // style URL
+            zoom: 15.6, // starting zoom
+            center: [-122.30615939742268, 47.656951249643674] // starting center
+        });
+
+
+
+        async function geojsonFetch() {
+
+            let response, uwplaces, japan, table;
+            response = await fetch('assets/uwplaces.geojson');
+            uwplaces = await response.json();
+            response = await fetch('assets/uw.geojson');
+            uw = await response.json();
+
+            table = document.getElementsByTagName("table")[0];
+            let row, cell1, cell2;
+            for (let i = 0; i < uwplaces.features.length; i++) {
+                // Create an empty <tr> element and add it to the 1st position of the table:
+                row = table.insertRow(-1);
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell1.innerHTML = uwplaces.features[i].properties.name;
+                cell2.innerHTML = uwplaces.features[i].properties.rating;
+            }
+
+
+            //load data to the map as new layers and table on the side.
+            map.on('load', function loadingData() {
+
+                map.addSource('uw', {
+                    type: 'geojson',
+                    data: uw
+                });
+
+                map.addLayer({
+                    'id': 'uw-layer',
+                    'type': 'fill',
+                    'source': 'uw',
+                    'paint': {
+                        'fill-color': 'plum', // blue color fill
+                        'fill-opacity': 0.5,
+                    }
+                });
+
+                map.addSource('uwplaces', {
+                    type: 'geojson',
+                    data: uwplaces
+                });
+
+                map.addLayer({
+                    'id': 'uwplaces-layer',
+                    'type': 'circle',
+                    'source': 'uwplaces',
+                    'paint': {
+                        'circle-radius': 8,
+                        'circle-stroke-width': 2,
+                        'circle-color': 'purple',
+                        'circle-stroke-color': 'white'
+                    }
+                });
+
+
+            });
+
+            map.on('click', 'uwplaces-layer', function (e) {
+                const popup = new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(e.features[0].properties.name)
+                    .addTo(map);
+            });
+
+        }
+    
+
+        geojsonFetch();
+
+        let btn = document.getElementsByTagName("button")[0];
+
+        btn.addEventListener('click', sortTable);
+
+        // define the function to sort table
+        function sortTable(e) {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementsByTagName("table")[0];
+            switching = true;
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                    //start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /*Get the two elements you want to compare,
+                    one from current row and one from the next:*/
+                    x = parseFloat(rows[i].getElementsByTagName("td")[1].innerHTML);
+                    y = parseFloat(rows[i + 1].getElementsByTagName("td")[1].innerHTML);
+                    //check if the two rows should switch place:
+                    if (x < y) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark that a switch has been done:*/
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

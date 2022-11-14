@@ -1,0 +1,145 @@
+{   
+    "type": "FeatureCollection",
+    "name": "uwplaces",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Husky Union Building",
+          "rating": 4
+        },
+        "geometry": {
+          "coordinates": [
+            -122.3051538947526,
+            47.655295506665
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Suzzallo Library",
+          "rating": 5
+        },
+        "geometry": {
+          "coordinates": [
+            -122.30815811072583,
+            47.65577271653646
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Smith Hall",
+          "rating": 4.5
+        },
+        "geometry": {
+          "coordinates": [
+            -122.3071625791807,
+            47.65664155080242
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Gowen Hall",
+          "rating": 4
+        },
+        "geometry": {
+          "coordinates": [
+            -122.30775404635321,
+            47.65636302020454
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Odegaard Library",
+          "rating": 4.5
+        },
+        "geometry": {
+          "coordinates": [
+            -122.31041754235702,
+            47.65646312244644
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+        "name": "Suzzallo Starbucks",
+         "rating": 4.8},
+        "geometry": {
+          "coordinates": [
+            -122.30862451405469,
+            47.65560114269027
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Savery Hall",
+          "rating": 4
+        },
+        "geometry": {
+          "coordinates": [
+            -122.30834509889044,
+            47.657108696444794
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Clark Hall",
+          "rating": 3.8
+        },
+        "geometry": {
+          "coordinates": [
+            -122.30488127177895,
+            47.65762639996106
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Architecture Hall",
+          "rating": 4.5
+        },
+        "geometry": {
+          "coordinates": [
+            -122.31090883685397,
+            47.65458303154779
+          ],
+          "type": "Point"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "HUB Starbucks",
+          "rating": 4.5
+        },
+        "geometry": {
+          "coordinates": [
+            -122.30540471410302,
+            47.65492646209299
+          ],
+          "type": "Point"
+        }
+      }
+    ]
+  }
